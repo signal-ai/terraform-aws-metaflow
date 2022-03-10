@@ -26,6 +26,7 @@ To read more, see [the Metaflow docs](https://docs.metaflow.org/metaflow-on-aws/
 | <a name="input_ecs_instance_role_arn"></a> [ecs\_instance\_role\_arn](#input\_ecs\_instance\_role\_arn) | This role will be granted access to our S3 Bucket which acts as our blob storage. | `string` | n/a | yes |
 | <a name="input_metadata_service_security_group_id"></a> [metadata\_service\_security\_group\_id](#input\_metadata\_service\_security\_group\_id) | The security group ID used by the MetaData service. We'll grant this access to our DB. | `string` | n/a | yes |
 | <a name="input_metaflow_vpc_id"></a> [metaflow\_vpc\_id](#input\_metaflow\_vpc\_id) | ID of the Metaflow VPC this SageMaker notebook instance is to be deployed in | `string` | n/a | yes |
+| <a name="input_postgres_engine_version"></a> [postgres\_engine\_version](#input\_postgres\_engine\_version) | Postgres engine version to use for Metaflow database. | `string` | `"11"` | no |
 | <a name="input_resource_prefix"></a> [resource\_prefix](#input\_resource\_prefix) | Prefix given to all AWS resources to differentiate between applications | `string` | n/a | yes |
 | <a name="input_resource_suffix"></a> [resource\_suffix](#input\_resource\_suffix) | Suffix given to all AWS resources to differentiate between environment and workspace | `string` | n/a | yes |
 | <a name="input_standard_tags"></a> [standard\_tags](#input\_standard\_tags) | The standard tags to apply to every AWS resource. | `map(string)` | n/a | yes |

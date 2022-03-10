@@ -16,6 +16,12 @@ variable "db_username" {
   default     = "metaflow"
 }
 
+variable "postgres_engine_version" {
+  type        = string
+  description = "Postgres engine version to use for Metaflow database."
+  default     = "11"
+}
+
 variable "ecs_execution_role_arn" {
   type        = string
   description = "This role will be granted access to our S3 Bucket which acts as our blob storage."

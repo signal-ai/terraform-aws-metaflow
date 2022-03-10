@@ -16,7 +16,7 @@ resource "aws_ecs_task_definition" "ui_static" {
           hostPort      = 3000
         }
       ]
-      environment = [for k, v in merge(local.default_ui_static_env_vars, var.extra_ui_static_env_vars): {name = k, value=v}]
+      environment = [for k, v in merge(local.default_ui_static_env_vars, var.extra_ui_static_env_vars) : { name = k, value = v }]
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -45,7 +45,7 @@ resource "aws_ecs_task_definition" "ui_static" {
 
 resource "aws_ecs_service" "ui_static" {
   name            = "${var.resource_prefix}ui_static${var.resource_suffix}"
-  cluster         = aws_ecs_cluster.this.id
+  cluster         = local.ecs_cluster_id
   task_definition = aws_ecs_task_definition.ui_static.arn
   desired_count   = 1
   launch_type     = "FARGATE"

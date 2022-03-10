@@ -182,3 +182,44 @@ resource "aws_iam_role_policy" "grant_ec2_custom_policies" {
   role   = aws_iam_role.batch_execution_role.name
   policy = data.aws_iam_policy_document.ec2_custom_policies.json
 }
+
+data "aws_iam_policy_document" "batch_spot_fleet_role_assume_role" {
+  statement {
+    actions = [
+      "sts:AssumeRole"
+    ]
+
+    effect = "Allow"
+
+    principals {
+      identifiers = [
+        "spotfleet.amazonaws.com"
+      ]
+      type = "Service"
+    }
+  }
+}
+
+data "aws_iam_policy" "amazon_ec2_spot_fleet_tagging_role" {
+  arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2SpotFleetTaggingRole"
+}
+
+resource "aws_iam_role" "spot_fleet_role" {
+  count = local.enable_spot_on_batch ? 1 : 0
+
+  name = local.batch_spot_fleet_role_name
+  # Learn more by reading this Terraform documentation https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/batch_compute_environment#spot_iam_fleet_role
+  # Learn more by reading this AWS Spot Fleet role documentation https://docs.aws.amazon.com/batch/latest/userguide/spot_fleet_IAM_role.html
+  description = "This role is passed to AWS Spot Fleet by AWS Batch as a `service_role`. This allows AWS Batch to make calls to other AWS services on our behalf."
+
+  assume_role_policy = data.aws_iam_policy_document.batch_spot_fleet_role_assume_role.json
+
+  tags = var.standard_tags
+}
+
+resource "aws_iam_role_policy_attachment" "grant_spot_fleet_role_ec2_tagging_policy" {
+  count = local.enable_spot_on_batch ? 1 : 0
+
+  role       = aws_iam_role.spot_fleet_role[0].name
+  policy_arn = data.aws_iam_policy.amazon_ec2_spot_fleet_tagging_role.arn
+}

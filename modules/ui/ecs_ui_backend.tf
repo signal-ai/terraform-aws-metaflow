@@ -15,7 +15,7 @@ resource "aws_ecs_task_definition" "ui_backend" {
           hostPort      = 8083
         }
       ]
-      environment = [for k, v in merge(local.default_ui_backend_env_vars, var.extra_ui_backend_env_vars): {name = k, value=v}]
+      environment = [for k, v in merge(local.default_ui_backend_env_vars, var.extra_ui_backend_env_vars) : { name = k, value = v }]
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -53,7 +53,7 @@ resource "aws_ecs_task_definition" "ui_backend" {
 
 resource "aws_ecs_service" "ui_backend" {
   name            = "${var.resource_prefix}ui_backend${var.resource_suffix}"
-  cluster         = aws_ecs_cluster.this.id
+  cluster         = local.ecs_cluster_id
   task_definition = aws_ecs_task_definition.ui_backend.arn
   desired_count   = 1
   launch_type     = "FARGATE"

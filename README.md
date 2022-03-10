@@ -1,4 +1,4 @@
-[![](https://img.shields.io/badge/slack-@outerbounds-purple.svg?logo=slack )](http://slack.outerbounds.co/)
+[![](https://img.shields.io/badge/slack-@outerbounds-purple.svg?logo=slack)](http://slack.outerbounds.co/)
 
 # Metaflow Terraform module
 
@@ -18,6 +18,16 @@ You can either use this high-level module, or submodules individually. See each 
 
 You can find a complete example that uses this module but also includes setting up VPC and other non-Metaflow-specific parts of infra [in this repo](https://github.com/outerbounds/metaflow-tools/tree/master/aws/terraform).
 
+## Development
+
+To format documentation:
+
+```bash
+pipx install pre-commit
+pre-commit install --install-hooks
+pre-commit run --all-files
+```
+
 <!-- BEGIN_TF_DOCS -->
 ## Modules
 
@@ -36,17 +46,23 @@ You can find a complete example that uses this module but also includes setting 
 |------|-------------|------|---------|:--------:|
 | <a name="input_access_list_cidr_blocks"></a> [access\_list\_cidr\_blocks](#input\_access\_list\_cidr\_blocks) | List of CIDRs we want to grant access to our Metaflow Metadata Service. Usually this is our VPN's CIDR blocks. | `list(string)` | `[]` | no |
 | <a name="input_api_basic_auth"></a> [api\_basic\_auth](#input\_api\_basic\_auth) | Enable basic auth for API Gateway? (requires key export) | `bool` | `true` | no |
-| <a name="input_batch_type"></a> [batch\_type](#input\_batch\_type) | AWS Batch Compute Type ('ec2', 'fargate') | `string` | `"ec2"` | no |
+| <a name="input_batch_type"></a> [batch\_type](#input\_batch\_type) | AWS Batch Compute Type ('ec2', 'fargate', 'spot') | `string` | `"ec2"` | no |
+| <a name="input_compute_environment_ami_id"></a> [compute\_environment\_ami\_id](#input\_compute\_environment\_ami\_id) | The AMI ID to use for Batch Compute Environment EC2 instances. If not specified, defaults to the latest ECS optimised AMI. | `string` | `null` | no |
 | <a name="input_compute_environment_desired_vcpus"></a> [compute\_environment\_desired\_vcpus](#input\_compute\_environment\_desired\_vcpus) | Desired Starting VCPUs for Batch Compute Environment [0-16] for EC2 Batch Compute Environment (ignored for Fargate) | `number` | `8` | no |
 | <a name="input_compute_environment_instance_types"></a> [compute\_environment\_instance\_types](#input\_compute\_environment\_instance\_types) | The instance types for the compute environment | `list(string)` | <pre>[<br>  "c4.large",<br>  "c4.xlarge",<br>  "c4.2xlarge",<br>  "c4.4xlarge",<br>  "c4.8xlarge"<br>]</pre> | no |
 | <a name="input_compute_environment_max_vcpus"></a> [compute\_environment\_max\_vcpus](#input\_compute\_environment\_max\_vcpus) | Maximum VCPUs for Batch Compute Environment [16-96] | `number` | `64` | no |
 | <a name="input_compute_environment_min_vcpus"></a> [compute\_environment\_min\_vcpus](#input\_compute\_environment\_min\_vcpus) | Minimum VCPUs for Batch Compute Environment [0-16] for EC2 Batch Compute Environment (ignored for Fargate) | `number` | `8` | no |
+| <a name="input_compute_environment_spot_bid_percentage"></a> [compute\_environment\_spot\_bid\_percentage](#input\_compute\_environment\_spot\_bid\_percentage) | The maximum percentage of on-demand EC2 instance price to bid for spot instances when using the 'spot' AWS Batch Compute Type. | `number` | `100` | no |
+| <a name="input_compute_environment_user_data_base64"></a> [compute\_environment\_user\_data\_base64](#input\_compute\_environment\_user\_data\_base64) | Base64 hash of the user data to use for Batch Compute Environment EC2 instances. | `string` | `null` | no |
+| <a name="input_db_instance_type"></a> [db\_instance\_type](#input\_db\_instance\_type) | RDS instance type to launch for PostgresQL database. | `string` | `"db.t2.small"` | no |
+| <a name="input_ecs_cluster_id"></a> [ecs\_cluster\_id](#input\_ecs\_cluster\_id) | The ID of an existing ECS cluster to run services on. If no cluster ID is specfied, a new cluster will be created. | `string` | `null` | no |
 | <a name="input_enable_custom_batch_container_registry"></a> [enable\_custom\_batch\_container\_registry](#input\_enable\_custom\_batch\_container\_registry) | Provisions infrastructure for custom Amazon ECR container registry if enabled | `bool` | `false` | no |
 | <a name="input_enable_step_functions"></a> [enable\_step\_functions](#input\_enable\_step\_functions) | Provisions infrastructure for step functions if enabled | `bool` | n/a | yes |
 | <a name="input_extra_ui_backend_env_vars"></a> [extra\_ui\_backend\_env\_vars](#input\_extra\_ui\_backend\_env\_vars) | Additional environment variables for UI backend container | `map(string)` | `{}` | no |
 | <a name="input_extra_ui_static_env_vars"></a> [extra\_ui\_static\_env\_vars](#input\_extra\_ui\_static\_env\_vars) | Additional environment variables for UI static app | `map(string)` | `{}` | no |
 | <a name="input_iam_partition"></a> [iam\_partition](#input\_iam\_partition) | IAM Partition (Select aws-us-gov for AWS GovCloud, otherwise leave as is) | `string` | `"aws"` | no |
 | <a name="input_metadata_service_container_image"></a> [metadata\_service\_container\_image](#input\_metadata\_service\_container\_image) | Container image for metadata service | `string` | `""` | no |
+| <a name="input_postgres_engine_version"></a> [postgres\_engine\_version](#input\_postgres\_engine\_version) | Postgres engine version to use for Metaflow database. | `string` | `"11"` | no |
 | <a name="input_resource_prefix"></a> [resource\_prefix](#input\_resource\_prefix) | string prefix for all resources | `string` | `"metaflow"` | no |
 | <a name="input_resource_suffix"></a> [resource\_suffix](#input\_resource\_suffix) | string suffix for all resources | `string` | `""` | no |
 | <a name="input_subnet1_id"></a> [subnet1\_id](#input\_subnet1\_id) | First subnet used for availability zone redundancy | `string` | n/a | yes |

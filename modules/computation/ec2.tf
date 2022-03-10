@@ -15,7 +15,8 @@ resource "aws_launch_template" "cpu" {
     arn = aws_iam_instance_profile.ecs_instance_role.arn
   }
 
-  image_id = jsondecode(data.aws_ssm_parameter.ecs_optimized_cpu_ami.value)["image_id"]
+  user_data = var.compute_environment_user_data_base64 != null ? var.compute_environment_user_data_base64 : null
+  image_id  = var.compute_environment_ami_id != null ? var.compute_environment_ami_id : jsondecode(data.aws_ssm_parameter.ecs_optimized_cpu_ami.value)["image_id"]
 
   block_device_mappings {
     device_name = "/dev/xvda"
@@ -25,6 +26,13 @@ resource "aws_launch_template" "cpu" {
       delete_on_termination = true
       encrypted             = true
     }
+  }
+
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "optional"
+    # Allow ECS containers to use the hosts IMDSv2 endpoint
+    http_put_response_hop_limit = 2
   }
 
   tags = var.standard_tags

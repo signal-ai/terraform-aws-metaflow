@@ -12,11 +12,15 @@ To read more, see [the Metaflow docs](https://docs.metaflow.org/metaflow-on-aws/
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_batch_type"></a> [batch\_type](#input\_batch\_type) | AWS Batch Compute Type ('ec2', 'fargate') | `string` | `"ec2"` | no |
+| <a name="input_batch_type"></a> [batch\_type](#input\_batch\_type) | AWS Batch Compute Type ('ec2', 'fargate', 'spot') | `string` | `"ec2"` | no |
+| <a name="input_compute_environment_ami_id"></a> [compute\_environment\_ami\_id](#input\_compute\_environment\_ami\_id) | The AMI ID to use for Batch Compute Environment EC2 instances. If not specified, defaults to the latest ECS optimised AMI. | `string` | `null` | no |
 | <a name="input_compute_environment_desired_vcpus"></a> [compute\_environment\_desired\_vcpus](#input\_compute\_environment\_desired\_vcpus) | Desired Starting VCPUs for Batch Compute Environment [0-16] for EC2 Batch Compute Environment (ignored for Fargate) | `number` | n/a | yes |
 | <a name="input_compute_environment_instance_types"></a> [compute\_environment\_instance\_types](#input\_compute\_environment\_instance\_types) | The instance types for the compute environment as a comma-separated list | `list(string)` | n/a | yes |
 | <a name="input_compute_environment_max_vcpus"></a> [compute\_environment\_max\_vcpus](#input\_compute\_environment\_max\_vcpus) | Maximum VCPUs for Batch Compute Environment [16-96] | `number` | n/a | yes |
 | <a name="input_compute_environment_min_vcpus"></a> [compute\_environment\_min\_vcpus](#input\_compute\_environment\_min\_vcpus) | Minimum VCPUs for Batch Compute Environment [0-16] for EC2 Batch Compute Environment (ignored for Fargate) | `number` | n/a | yes |
+| <a name="input_compute_environment_spot_bid_percentage"></a> [compute\_environment\_spot\_bid\_percentage](#input\_compute\_environment\_spot\_bid\_percentage) | The maximum percentage of on-demand EC2 instance price to bid for spot instances when using the 'spot' AWS Batch Compute Type. | `number` | `100` | no |
+| <a name="input_compute_environment_user_data_base64"></a> [compute\_environment\_user\_data\_base64](#input\_compute\_environment\_user\_data\_base64) | Base64 hash of the user data to use for Batch Compute Environment EC2 instances. | `string` | `null` | no |
+| <a name="input_ecs_cluster_id"></a> [ecs\_cluster\_id](#input\_ecs\_cluster\_id) | The ID of an existing ECS cluster to run services on. If no cluster ID is specfied, a new cluster will be created. | `string` | `null` | no |
 | <a name="input_enable_step_functions"></a> [enable\_step\_functions](#input\_enable\_step\_functions) | If true, apply policies required for step functions | `bool` | `false` | no |
 | <a name="input_iam_partition"></a> [iam\_partition](#input\_iam\_partition) | IAM Partition (Select aws-us-gov for AWS GovCloud, otherwise leave as is) | `string` | `"aws"` | no |
 | <a name="input_metaflow_step_functions_dynamodb_policy"></a> [metaflow\_step\_functions\_dynamodb\_policy](#input\_metaflow\_step\_functions\_dynamodb\_policy) | IAM policy allowing access to the step functions dynamodb policy | `string` | n/a | yes |

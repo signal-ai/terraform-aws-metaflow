@@ -4,6 +4,8 @@ module "metaflow-datastore" {
   resource_prefix = local.resource_prefix
   resource_suffix = local.resource_suffix
 
+  db_instance_type                   = var.db_instance_type
+  postgres_engine_version            = var.postgres_engine_version
   ecs_execution_role_arn             = module.metaflow-computation.ecs_execution_role_arn
   ecs_instance_role_arn              = module.metaflow-computation.ecs_instance_role_arn
   metadata_service_security_group_id = module.metaflow-metadata-service.metadata_service_security_group_id
@@ -20,20 +22,21 @@ module "metaflow-metadata-service" {
   resource_prefix = local.resource_prefix
   resource_suffix = local.resource_suffix
 
-  access_list_cidr_blocks           = var.access_list_cidr_blocks
-  api_basic_auth                    = var.api_basic_auth
-  database_password                 = module.metaflow-datastore.database_password
-  database_username                 = module.metaflow-datastore.database_username
-  datastore_s3_bucket_kms_key_arn   = module.metaflow-datastore.datastore_s3_bucket_kms_key_arn
-  fargate_execution_role_arn        = module.metaflow-computation.ecs_execution_role_arn
-  iam_partition                     = var.iam_partition
-  metadata_service_container_image  = local.metadata_service_container_image
-  metaflow_vpc_id                   = var.vpc_id
-  rds_master_instance_endpoint      = module.metaflow-datastore.rds_master_instance_endpoint
-  s3_bucket_arn                     = module.metaflow-datastore.s3_bucket_arn
-  subnet1_id                        = var.subnet1_id
-  subnet2_id                        = var.subnet2_id
-  vpc_cidr_block                    = var.vpc_cidr_block
+  access_list_cidr_blocks          = var.access_list_cidr_blocks
+  api_basic_auth                   = var.api_basic_auth
+  database_password                = module.metaflow-datastore.database_password
+  database_username                = module.metaflow-datastore.database_username
+  datastore_s3_bucket_kms_key_arn  = module.metaflow-datastore.datastore_s3_bucket_kms_key_arn
+  ecs_cluster_id                   = var.ecs_cluster_id
+  fargate_execution_role_arn       = module.metaflow-computation.ecs_execution_role_arn
+  iam_partition                    = var.iam_partition
+  metadata_service_container_image = local.metadata_service_container_image
+  metaflow_vpc_id                  = var.vpc_id
+  rds_master_instance_endpoint     = module.metaflow-datastore.rds_master_instance_endpoint
+  s3_bucket_arn                    = module.metaflow-datastore.s3_bucket_arn
+  subnet1_id                       = var.subnet1_id
+  subnet2_id                       = var.subnet2_id
+  vpc_cidr_block                   = var.vpc_cidr_block
 
   standard_tags = var.tags
 }
@@ -47,6 +50,7 @@ module "metaflow-ui" {
   database_password               = module.metaflow-datastore.database_password
   database_username               = module.metaflow-datastore.database_username
   datastore_s3_bucket_kms_key_arn = module.metaflow-datastore.datastore_s3_bucket_kms_key_arn
+  ecs_cluster_id                  = var.ecs_cluster_id
   fargate_execution_role_arn      = module.metaflow-computation.ecs_execution_role_arn
   iam_partition                   = var.iam_partition
   metaflow_vpc_id                 = var.vpc_id
@@ -56,13 +60,13 @@ module "metaflow-ui" {
   subnet2_id                      = var.subnet2_id
   ui_backend_container_image      = local.metadata_service_container_image
 
-  METAFLOW_DATASTORE_SYSROOT_S3   = module.metaflow-datastore.METAFLOW_DATASTORE_SYSROOT_S3
-  certificate_arn = var.ui_certificate_arn
-  metadata_service_security_group_id  = module.metaflow-metadata-service.metadata_service_security_group_id
+  METAFLOW_DATASTORE_SYSROOT_S3      = module.metaflow-datastore.METAFLOW_DATASTORE_SYSROOT_S3
+  certificate_arn                    = var.ui_certificate_arn
+  metadata_service_security_group_id = module.metaflow-metadata-service.metadata_service_security_group_id
 
-  extra_ui_static_env_vars = var.extra_ui_static_env_vars
+  extra_ui_static_env_vars  = var.extra_ui_static_env_vars
   extra_ui_backend_env_vars = var.extra_ui_backend_env_vars
-  standard_tags = var.tags
+  standard_tags             = var.tags
 }
 
 module "metaflow-computation" {
@@ -72,10 +76,15 @@ module "metaflow-computation" {
   resource_suffix = local.resource_suffix
 
   batch_type                              = var.batch_type
+  compute_environment_ami_id              = var.compute_environment_ami_id
+  compute_environment_spot_bid_percentage = var.compute_environment_spot_bid_percentage
+  compute_environment_user_data_base64    = var.compute_environment_user_data_base64
   compute_environment_desired_vcpus       = var.compute_environment_desired_vcpus
   compute_environment_instance_types      = var.compute_environment_instance_types
   compute_environment_max_vcpus           = var.compute_environment_max_vcpus
   compute_environment_min_vcpus           = var.compute_environment_min_vcpus
+
+  ecs_cluster_id                          = var.ecs_cluster_id
   enable_step_functions                   = var.enable_step_functions
   iam_partition                           = var.iam_partition
   metaflow_step_functions_dynamodb_policy = module.metaflow-step-functions.metaflow_step_functions_dynamodb_policy

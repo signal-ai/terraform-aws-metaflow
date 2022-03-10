@@ -6,12 +6,13 @@ locals {
   # Name of ECS cluster.
   # replace() ensures names that are composed of just prefix + suffix do not have duplicate dashes
   ecs_cluster_name = replace("${var.resource_prefix}${var.resource_suffix}", "--", "-")
+  ecs_cluster_id   = var.ecs_cluster_id != null ? var.ecs_cluster_id : aws_ecs_cluster.this[0].id
 
   is_gov = var.iam_partition == "aws-us-gov"
 
   # Name of Fargate security group used by the Metadata Service
   metadata_service_security_group_name = "${var.resource_prefix}metadata-service-security-group${var.resource_suffix}"
-  metadata_service_container_image  = (
+  metadata_service_container_image = (
     var.metadata_service_container_image == "" ?
     module.metaflow-common.default_metadata_service_container_image :
     var.metadata_service_container_image

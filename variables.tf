@@ -12,8 +12,19 @@ variable "api_basic_auth" {
 
 variable "batch_type" {
   type        = string
-  description = "AWS Batch Compute Type ('ec2', 'fargate')"
+  description = "AWS Batch Compute Type ('ec2', 'fargate', 'spot')"
   default     = "ec2"
+
+  validation {
+    condition     = contains(["ec2", "fargate", "spot"], var.batch_type)
+    error_message = "Allowed values for input_parameter are 'ec2', 'fargate', 'spot'."
+  }
+}
+
+variable "db_instance_type" {
+  type        = string
+  description = "RDS instance type to launch for PostgresQL database."
+  default     = "db.t2.small"
 }
 
 variable "enable_custom_batch_container_registry" {
@@ -35,6 +46,24 @@ variable "resource_prefix" {
 variable "resource_suffix" {
   default     = ""
   description = "string suffix for all resources"
+}
+
+variable "compute_environment_ami_id" {
+  type        = string
+  description = "The AMI ID to use for Batch Compute Environment EC2 instances. If not specified, defaults to the latest ECS optimised AMI."
+  default     = null
+}
+
+variable "compute_environment_user_data_base64" {
+  type        = string
+  default     = null
+  description = "Base64 hash of the user data to use for Batch Compute Environment EC2 instances."
+}
+
+variable "compute_environment_spot_bid_percentage" {
+  type        = number
+  default     = 100
+  description = "The maximum percentage of on-demand EC2 instance price to bid for spot instances when using the 'spot' AWS Batch Compute Type."
 }
 
 variable "compute_environment_desired_vcpus" {
@@ -61,6 +90,12 @@ variable "compute_environment_max_vcpus" {
   default     = 64
 }
 
+variable "ecs_cluster_id" {
+  type        = string
+  default     = null
+  description = "The ID of an existing ECS cluster to run services on. If no cluster ID is specfied, a new cluster will be created."
+}
+
 variable "iam_partition" {
   type        = string
   default     = "aws"
@@ -68,9 +103,15 @@ variable "iam_partition" {
 }
 
 variable "metadata_service_container_image" {
-  type = string
-  default = ""
+  type        = string
+  default     = ""
   description = "Container image for metadata service"
+}
+
+variable "postgres_engine_version" {
+  type        = string
+  description = "Postgres engine version to use for Metaflow database."
+  default     = "11"
 }
 
 variable "tags" {
@@ -106,13 +147,13 @@ variable "ui_certificate_arn" {
 }
 
 variable "extra_ui_backend_env_vars" {
-  type = map(string)
-  default = {}
+  type        = map(string)
+  default     = {}
   description = "Additional environment variables for UI backend container"
 }
 
 variable "extra_ui_static_env_vars" {
-  type = map(string)
-  default = {}
+  type        = map(string)
+  default     = {}
   description = "Additional environment variables for UI static app"
 }

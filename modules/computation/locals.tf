@@ -15,8 +15,12 @@ locals {
   # Name of Batch service IAM role
   batch_execution_role_name = "${var.resource_prefix}batch-execution-role${var.resource_suffix}"
 
+  # Name of Batch ECS Spot Fleet service IAM role
+  batch_spot_fleet_role_name = "${var.resource_prefix}batch-spot-fleet-role${var.resource_suffix}"
+
   # Name of ECS IAM role
   ecs_instance_role_name = "${var.resource_prefix}ecs-iam-role${var.resource_suffix}"
 
   enable_fargate_on_batch = var.batch_type == "fargate"
+  enable_spot_on_batch    = var.batch_type == "spot"
 }

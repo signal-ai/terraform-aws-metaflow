@@ -1,7 +1,30 @@
 variable "batch_type" {
   type        = string
-  description = "AWS Batch Compute Type ('ec2', 'fargate')"
+  description = "AWS Batch Compute Type ('ec2', 'fargate', 'spot')"
   default     = "ec2"
+
+  validation {
+    condition     = contains(["ec2", "fargate", "spot"], var.batch_type)
+    error_message = "Allowed values for input_parameter are 'ec2', 'fargate', 'spot'."
+  }
+}
+
+variable "compute_environment_ami_id" {
+  type        = string
+  description = "The AMI ID to use for Batch Compute Environment EC2 instances. If not specified, defaults to the latest ECS optimised AMI."
+  default     = null
+}
+
+variable "compute_environment_user_data_base64" {
+  type        = string
+  default     = null
+  description = "Base64 hash of the user data to use for Batch Compute Environment EC2 instances."
+}
+
+variable "compute_environment_spot_bid_percentage" {
+  type        = number
+  default     = 100
+  description = "The maximum percentage of on-demand EC2 instance price to bid for spot instances when using the 'spot' AWS Batch Compute Type."
 }
 
 variable "compute_environment_desired_vcpus" {
@@ -22,6 +45,12 @@ variable "compute_environment_max_vcpus" {
 variable "compute_environment_min_vcpus" {
   type        = number
   description = "Minimum VCPUs for Batch Compute Environment [0-16] for EC2 Batch Compute Environment (ignored for Fargate)"
+}
+
+variable "ecs_cluster_id" {
+  type        = string
+  default     = null
+  description = "The ID of an existing ECS cluster to run services on. If no cluster ID is specfied, a new cluster will be created."
 }
 
 variable "enable_step_functions" {

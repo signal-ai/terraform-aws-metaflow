@@ -14,6 +14,12 @@ variable "datastore_s3_bucket_kms_key_arn" {
   description = "The ARN of the KMS key used to encrypt the Metaflow datastore S3 bucket"
 }
 
+variable "ecs_cluster_id" {
+  type        = string
+  default     = null
+  description = "The ID of an existing ECS cluster to run services on. If no cluster ID is specfied, a new cluster will be created."
+}
+
 variable "fargate_execution_role_arn" {
   type        = string
   description = "The IAM role that grants access to ECS and Batch services which we'll use as our Metadata Service API's execution_role for our Fargate instance"
@@ -87,26 +93,26 @@ variable "metadata_service_security_group_id" {
 }
 
 variable "extra_ui_backend_env_vars" {
-  type = map(string)
-  default = {}
+  type        = map(string)
+  default     = {}
   description = "Additional environment variables for UI backend container"
 }
 
 variable "extra_ui_static_env_vars" {
-  type = map(string)
-  default = {}
+  type        = map(string)
+  default     = {}
   description = "Additional environment variables for UI static app"
 }
 
 variable "ui_backend_container_image" {
-  type = string
-  default = ""
+  type        = string
+  default     = ""
   description = "Container image for UI backend"
 }
 
 variable "ui_static_container_image" {
-  type = string
-  default = "public.ecr.aws/outerbounds/metaflow_ui:v1.0.1"
+  type        = string
+  default     = "public.ecr.aws/outerbounds/metaflow_ui:v1.0.1"
   description = "Container image for the UI frontend app"
 }
 

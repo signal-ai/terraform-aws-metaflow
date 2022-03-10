@@ -54,7 +54,7 @@ resource "aws_lb" "this" {
 }
 
 resource "aws_lb_target_group" "this" {
-  name        = "${var.resource_prefix}mdtg${var.resource_suffix}"
+  name        = length("${var.resource_prefix}mdtg${var.resource_suffix}") <= 32 ? "${var.resource_prefix}mdtg${var.resource_suffix}" : null
   port        = 8080
   protocol    = "TCP"
   target_type = "ip"
@@ -67,11 +67,13 @@ resource "aws_lb_target_group" "this" {
     unhealthy_threshold = 2
   }
 
-  tags = var.standard_tags
+  tags = merge(var.standard_tags, {
+    Name = "${var.resource_prefix}mdtg${var.resource_suffix}"
+  })
 }
 
 resource "aws_lb_target_group" "db_migrate" {
-  name        = "${var.resource_prefix}dbtg${var.resource_suffix}"
+  name        = length("${var.resource_prefix}dbtg${var.resource_suffix}") <= 32 ? "${var.resource_prefix}dbtg${var.resource_suffix}" : null
   port        = 8082
   protocol    = "TCP"
   target_type = "ip"
@@ -85,7 +87,9 @@ resource "aws_lb_target_group" "db_migrate" {
     unhealthy_threshold = 2
   }
 
-  tags = var.standard_tags
+  tags = merge(var.standard_tags, {
+    Name = "${var.resource_prefix}dbtg${var.resource_suffix}"
+  })
 }
 
 resource "aws_lb_listener" "this" {

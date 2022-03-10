@@ -1,5 +1,6 @@
 resource "aws_ecs_cluster" "this" {
-  name = local.ecs_cluster_name
+  count = var.ecs_cluster_id != null ? 0 : 1
+  name  = local.ecs_cluster_name
 
   tags = merge(
     var.standard_tags,
@@ -67,7 +68,7 @@ EOF
 
 resource "aws_ecs_service" "this" {
   name            = "${var.resource_prefix}metadata-service${var.resource_suffix}"
-  cluster         = aws_ecs_cluster.this.id
+  cluster         = local.ecs_cluster_id
   task_definition = aws_ecs_task_definition.this.arn
   desired_count   = 1
   launch_type     = "FARGATE"

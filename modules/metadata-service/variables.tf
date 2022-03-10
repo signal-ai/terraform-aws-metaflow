@@ -9,6 +9,12 @@ variable "api_basic_auth" {
   description = "Enable basic auth for API Gateway? (requires key export)"
 }
 
+variable "ecs_cluster_id" {
+  type        = string
+  default     = null
+  description = "The ID of an existing ECS cluster to run services on. If no cluster ID is specfied, a new cluster will be created."
+}
+
 variable "database_password" {
   type        = string
   description = "The database password"
@@ -42,8 +48,8 @@ variable "is_gov" {
 }
 
 variable "metadata_service_container_image" {
-  type = string
-  default = ""
+  type        = string
+  default     = ""
   description = "Container image for metadata service"
 }
 
