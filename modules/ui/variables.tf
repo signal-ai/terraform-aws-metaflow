@@ -84,7 +84,8 @@ variable "subnet2_id" {
 
 variable "certificate_arn" {
   type        = string
-  description = "SSL certificate ARN"
+  default     = null
+  description = "SSL certificate for UI. If no certificate arn is provided, HTTP will be used."
 }
 
 variable "metadata_service_security_group_id" {

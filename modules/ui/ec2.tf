@@ -121,8 +121,8 @@ resource "aws_lb_target_group" "ui_static" {
 
 resource "aws_lb_listener" "this" {
   load_balancer_arn = aws_lb.this.arn
-  port              = "443"
-  protocol          = "HTTPS"
+  port              = var.certificate_arn != null ? "443" : "80"
+  protocol          = var.certificate_arn != null ? "HTTPS" : "HTTP"
 
   certificate_arn = var.certificate_arn
 

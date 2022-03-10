@@ -144,6 +144,7 @@ variable "vpc_id" {
 variable "ui_certificate_arn" {
   type        = string
   description = "SSL certificate for UI"
+  default     = null
 }
 
 variable "extra_ui_backend_env_vars" {
