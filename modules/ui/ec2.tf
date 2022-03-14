@@ -41,11 +41,11 @@ resource "aws_security_group" "ui_lb_security_group" {
   vpc_id      = var.metaflow_vpc_id
 
   ingress {
-    from_port   = 443
-    to_port     = 443
+    from_port   = var.certificate_arn != null ? 443 : 80
+    to_port     = var.certificate_arn != null ? 443 : 80
     protocol    = "tcp"
     cidr_blocks = var.ui_allow_list
-    description = "Allow public HTTPS"
+    description = var.certificate_arn != null ? "Allow public HTTPS" : "Allow public HTTP"
   }
 
   ingress {

@@ -143,8 +143,14 @@ variable "vpc_id" {
 
 variable "ui_certificate_arn" {
   type        = string
-  description = "SSL certificate for UI"
-  default     = null
+  description = "SSL certificate for UI. If no certificate arn is provided, HTTP will be used."
+  default = null
+}
+
+variable "ui_cidr_allow_list" {
+  type        = list(string)
+  description = "A list of CIDRs the UI will be available to"
+  default     = ["0.0.0.0/0"]
 }
 
 variable "extra_ui_backend_env_vars" {
