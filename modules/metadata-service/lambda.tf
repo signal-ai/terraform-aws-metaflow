@@ -78,44 +78,30 @@ resource "aws_iam_role_policy" "grant_lambda_ecs_vpc" {
   policy = data.aws_iam_policy_document.lambda_ecs_task_execute_policy_vpc.json
 }
 
-resource "local_file" "db_migrate_lambda" {
-  content  = <<EOF
-import os, json
-from urllib import request
-
-def handler(event, context):
-  response = {}
-  status_endpoint = "{}/db_schema_status".format(os.environ.get('MD_LB_ADDRESS'))
-  upgrade_endpoint = "{}/upgrade".format(os.environ.get('MD_LB_ADDRESS'))
-
-  with request.urlopen(status_endpoint) as status:
-    response['init-status'] = json.loads(status.read())
-
-  upgrade_patch = request.Request(upgrade_endpoint, method='PATCH')
-  with request.urlopen(upgrade_patch) as upgrade:
-    response['upgrade-result'] = upgrade.read().decode()
-
-  with request.urlopen(status_endpoint) as status:
-    response['final-status'] = json.loads(status.read())
-
-  print(response)
-  return(response)
-EOF
-  filename = local.db_migrate_lambda_source_file
-}
-
 data "archive_file" "db_migrate_lambda" {
   type             = "zip"
-  source_file      = local.db_migrate_lambda_source_file
+
+  # enumerate each file in the archive to prevent changes to the archive based on the platform
+  # https://github.com/hashicorp/terraform-provider-archive/issues/34#issuecomment-907233664
+  dynamic "source" {
+      for_each = toset([
+        "db-migrate-lambda/index.py",
+      ])
+
+      content {
+        content  = file("${path.module}/${source.value}")
+        filename = basename(source.value)
+      }
+    }
+
   output_file_mode = "0666"
   output_path      = local.db_migrate_lambda_zip_file
-  depends_on       = [local_file.db_migrate_lambda]
 }
 
 resource "aws_lambda_function" "db_migrate_lambda" {
   function_name    = local.db_migrate_lambda_name
   handler          = "index.handler"
-  runtime          = "python3.7"
+  runtime          = "python3.9"
   memory_size      = 128
   timeout          = 900
   description      = "Trigger DB Migration"
