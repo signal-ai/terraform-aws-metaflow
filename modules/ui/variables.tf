@@ -122,3 +122,9 @@ variable "ui_allow_list" {
   description = "A list of CIDRs the UI will be available to"
   default     = ["0.0.0.0/0"]
 }
+
+variable "ui_external_alb" {
+  type        = bool
+  description = "Whether the UI ALB is external or internal."
+  default     = true
+}

@@ -153,6 +153,12 @@ variable "ui_cidr_allow_list" {
   default     = ["0.0.0.0/0"]
 }
 
+variable "ui_external_alb" {
+  type        = bool
+  description = "Whether the UI ALB is external or internal."
+  default     = true
+}
+
 variable "extra_ui_backend_env_vars" {
   type        = map(string)
   default     = {}

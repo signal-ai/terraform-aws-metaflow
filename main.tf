@@ -60,6 +60,7 @@ module "metaflow-ui" {
   subnet2_id                      = var.subnet2_id
   ui_backend_container_image      = local.metadata_service_container_image
   ui_allow_list                   = var.ui_cidr_allow_list
+  ui_external_alb                 = var.ui_external_alb
 
   METAFLOW_DATASTORE_SYSROOT_S3      = module.metaflow-datastore.METAFLOW_DATASTORE_SYSROOT_S3
   certificate_arn                    = var.ui_certificate_arn
