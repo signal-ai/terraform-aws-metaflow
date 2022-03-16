@@ -135,6 +135,15 @@ resource "aws_api_gateway_method_response" "db" {
 resource "aws_api_gateway_deployment" "this" {
   rest_api_id = aws_api_gateway_rest_api.this.id
 
+  stage_name = local.api_gateway_stage_name
+  # Force re-deployments if any dependencies change
+  # https://github.com/hashicorp/terraform/issues/6613
+  stage_description = <<EOF
+${join(",", var.access_list_cidr_blocks)}
+${var.api_basic_auth}
+${md5(file("${path.module}/api-gateway.tf"))}
+EOF
+
   # explicit depends_on required to ensure module stands up on first `apply`
   # otherwise a second followup `apply` would be required
   # can read more here: https://stackoverflow.com/a/42783769
