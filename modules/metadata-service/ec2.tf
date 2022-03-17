@@ -101,6 +101,8 @@ resource "aws_lb_listener" "this" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.this.id
   }
+
+  tags = var.standard_tags
 }
 
 resource "aws_lb_listener" "db_migrate" {
@@ -112,4 +114,6 @@ resource "aws_lb_listener" "db_migrate" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.db_migrate.id
   }
+
+  tags = var.standard_tags
 }

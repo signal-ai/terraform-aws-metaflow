@@ -131,6 +131,8 @@ resource "aws_lb_listener" "this" {
     target_group_arn = aws_lb_target_group.ui_static.id
     order            = 100
   }
+
+  tags = var.standard_tags
 }
 
 resource "aws_lb_listener_rule" "ui_backend" {
@@ -147,4 +149,6 @@ resource "aws_lb_listener_rule" "ui_backend" {
       values = ["/api/*"]
     }
   }
+
+  tags = var.standard_tags
 }

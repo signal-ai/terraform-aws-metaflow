@@ -22,6 +22,8 @@ resource "aws_iam_role" "ecs_instance_role" {
   description = "This role is passed to AWS Batch as a `instance_role`. This allows our Metaflow Batch jobs to execute with proper permissions."
 
   assume_role_policy = data.aws_iam_policy_document.ecs_instance_role_assume_role.json
+
+  tags = var.standard_tags
 }
 
 /*

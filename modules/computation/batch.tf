@@ -67,6 +67,8 @@ resource "aws_batch_compute_environment" "this" {
     tags = var.standard_tags
   }
 
+  tags = var.standard_tags
+
   lifecycle {
     /* From here https://github.com/terraform-providers/terraform-provider-aws/issues/11077#issuecomment-560416740
        helps with "modifying" batch compute environments which requires creating new ones and deleting old ones

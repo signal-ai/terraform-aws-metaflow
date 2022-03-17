@@ -48,4 +48,5 @@ resource "aws_launch_template" "cpu" {
 resource "aws_iam_instance_profile" "ecs_instance_role" {
   name = local.ecs_instance_role_name
   role = aws_iam_role.ecs_instance_role.name
+  tags = var.standard_tags
 }
