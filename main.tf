@@ -6,8 +6,6 @@ module "metaflow-datastore" {
 
   db_instance_type                   = var.db_instance_type
   postgres_engine_version            = var.postgres_engine_version
-  ecs_execution_role_arn             = module.metaflow-computation.ecs_execution_role_arn
-  ecs_instance_role_arn              = module.metaflow-computation.ecs_instance_role_arn
   metadata_service_security_group_id = module.metaflow-metadata-service.metadata_service_security_group_id
   metaflow_vpc_id                    = var.vpc_id
   subnet1_id                         = var.subnet1_id
