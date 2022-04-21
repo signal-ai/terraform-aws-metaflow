@@ -114,6 +114,12 @@ variable "postgres_engine_version" {
   default     = "11"
 }
 
+variable "ui_static_container_image" {
+  type        = string
+  default     = ""
+  description = "Container image for the UI frontend app"
+}
+
 variable "tags" {
   description = "aws tags"
   type        = map(string)

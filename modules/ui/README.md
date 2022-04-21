@@ -32,7 +32,7 @@ The services are deployed behind an AWS ALB, and the module will output the ALB 
 | <a name="input_ui_allow_list"></a> [ui\_allow\_list](#input\_ui\_allow\_list) | A list of CIDRs the UI will be available to | `list(string)` | <pre>[<br>  "0.0.0.0/0"<br>]</pre> | no |
 | <a name="input_ui_backend_container_image"></a> [ui\_backend\_container\_image](#input\_ui\_backend\_container\_image) | Container image for UI backend | `string` | `""` | no |
 | <a name="input_ui_external_alb"></a> [ui\_external\_alb](#input\_ui\_external\_alb) | Whether the UI ALB is external or internal. | `bool` | `true` | no |
-| <a name="input_ui_static_container_image"></a> [ui\_static\_container\_image](#input\_ui\_static\_container\_image) | Container image for the UI frontend app | `string` | `"public.ecr.aws/outerbounds/metaflow_ui:v1.1.2"` | no |
+| <a name="input_ui_static_container_image"></a> [ui\_static\_container\_image](#input\_ui\_static\_container\_image) | Container image for the UI frontend app | `string` | `""` | no |
 
 ## Outputs
 

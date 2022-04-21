@@ -112,7 +112,7 @@ variable "ui_backend_container_image" {
 
 variable "ui_static_container_image" {
   type        = string
-  default     = "public.ecr.aws/outerbounds/metaflow_ui:v1.1.2"
+  default     = ""
   description = "Container image for the UI frontend app"
 }
 
