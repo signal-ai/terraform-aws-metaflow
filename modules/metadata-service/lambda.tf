@@ -79,20 +79,20 @@ resource "aws_iam_role_policy" "grant_lambda_ecs_vpc" {
 }
 
 data "archive_file" "db_migrate_lambda" {
-  type             = "zip"
+  type = "zip"
 
   # enumerate each file in the archive to prevent changes to the archive based on the platform
   # https://github.com/hashicorp/terraform-provider-archive/issues/34#issuecomment-907233664
   dynamic "source" {
-      for_each = toset([
-        "db-migrate-lambda/index.py",
-      ])
+    for_each = toset([
+      "db-migrate-lambda/index.py",
+    ])
 
-      content {
-        content  = file("${path.module}/${source.value}")
-        filename = basename(source.value)
-      }
+    content {
+      content  = file("${path.module}/${source.value}")
+      filename = basename(source.value)
     }
+  }
 
   output_file_mode = "0666"
   output_path      = local.db_migrate_lambda_zip_file

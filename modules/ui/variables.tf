@@ -22,7 +22,7 @@ variable "ecs_cluster_id" {
 
 variable "fargate_execution_role_arn" {
   type        = string
-  description = "The IAM role that grants access to ECS and Batch services which we'll use as our Metadata Service API's execution_role for our Fargate instance"
+  description = "This role allows Fargate to pull container images and logs. We'll use it as execution_role for our Fargate task"
 }
 
 variable "iam_partition" {
@@ -39,7 +39,7 @@ variable "is_gov" {
 
 variable "metaflow_vpc_id" {
   type        = string
-  description = "ID of the Metaflow VPC this SageMaker notebook instance is to be deployed in"
+  description = "VPC to deploy services into"
 }
 
 variable "resource_prefix" {
@@ -59,7 +59,7 @@ variable "rds_master_instance_endpoint" {
 
 variable "s3_bucket_arn" {
   type        = string
-  description = "The ARN of the bucket we'll be using as blob storage"
+  description = "The ARN of the bucket used for Metaflow datastore"
 }
 
 variable "METAFLOW_DATASTORE_SYSROOT_S3" {
@@ -84,13 +84,12 @@ variable "subnet2_id" {
 
 variable "certificate_arn" {
   type        = string
-  default     = null
-  description = "SSL certificate for UI. If no certificate arn is provided, HTTP will be used."
+  description = "SSL certificate ARN. The certificate will be used by the UI load balancer."
 }
 
 variable "metadata_service_security_group_id" {
   type        = string
-  description = "The security group ID used by the MetaData service. We'll grant this access to our DB."
+  description = "The security group ID used by the MetaData service. This security group should allow connections to the RDS instance."
 }
 
 variable "extra_ui_backend_env_vars" {
