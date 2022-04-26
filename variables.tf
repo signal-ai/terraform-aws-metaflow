@@ -125,6 +125,12 @@ variable "tags" {
   type        = map(string)
 }
 
+variable "ui_alb_internal" {
+  type        = bool
+  description = "Defines whether the ALB for the UI is internal"
+  default     = false
+}
+
 # variables from infra project that defines the VPC we will deploy to
 
 variable "subnet1_id" {
@@ -157,12 +163,6 @@ variable "ui_cidr_allow_list" {
   type        = list(string)
   description = "A list of CIDRs the UI will be available to"
   default     = ["0.0.0.0/0"]
-}
-
-variable "ui_external_alb" {
-  type        = bool
-  description = "Whether the UI ALB is external or internal."
-  default     = true
 }
 
 variable "extra_ui_backend_env_vars" {

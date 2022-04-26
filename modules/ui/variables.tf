@@ -122,8 +122,8 @@ variable "ui_allow_list" {
   default     = ["0.0.0.0/0"]
 }
 
-variable "ui_external_alb" {
+variable "alb_internal" {
   type        = bool
-  description = "Whether the UI ALB is external or internal."
-  default     = true
+  description = "Defines whether the ALB is internal"
+  default     = false
 }

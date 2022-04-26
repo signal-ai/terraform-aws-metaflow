@@ -10,6 +10,7 @@ The services are deployed behind an AWS ALB, and the module will output the ALB 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_METAFLOW_DATASTORE_SYSROOT_S3"></a> [METAFLOW\_DATASTORE\_SYSROOT\_S3](#input\_METAFLOW\_DATASTORE\_SYSROOT\_S3) | METAFLOW\_DATASTORE\_SYSROOT\_S3 value | `string` | n/a | yes |
+| <a name="input_alb_internal"></a> [alb\_internal](#input\_alb\_internal) | Defines whether the ALB is internal | `bool` | `false` | no |
 | <a name="input_certificate_arn"></a> [certificate\_arn](#input\_certificate\_arn) | SSL certificate ARN. The certificate will be used by the UI load balancer. | `string` | n/a | yes |
 | <a name="input_database_password"></a> [database\_password](#input\_database\_password) | The database password | `string` | n/a | yes |
 | <a name="input_database_username"></a> [database\_username](#input\_database\_username) | The database username | `string` | n/a | yes |
@@ -31,7 +32,6 @@ The services are deployed behind an AWS ALB, and the module will output the ALB 
 | <a name="input_subnet2_id"></a> [subnet2\_id](#input\_subnet2\_id) | Second private subnet used for availability zone redundancy | `string` | n/a | yes |
 | <a name="input_ui_allow_list"></a> [ui\_allow\_list](#input\_ui\_allow\_list) | A list of CIDRs the UI will be available to | `list(string)` | <pre>[<br>  "0.0.0.0/0"<br>]</pre> | no |
 | <a name="input_ui_backend_container_image"></a> [ui\_backend\_container\_image](#input\_ui\_backend\_container\_image) | Container image for UI backend | `string` | `""` | no |
-| <a name="input_ui_external_alb"></a> [ui\_external\_alb](#input\_ui\_external\_alb) | Whether the UI ALB is external or internal. | `bool` | `true` | no |
 | <a name="input_ui_static_container_image"></a> [ui\_static\_container\_image](#input\_ui\_static\_container\_image) | Container image for the UI frontend app | `string` | `""` | no |
 
 ## Outputs
