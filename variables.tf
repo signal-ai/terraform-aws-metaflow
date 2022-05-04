@@ -159,10 +159,10 @@ variable "ui_certificate_arn" {
   default     = null
 }
 
-variable "ui_cidr_allow_list" {
+variable "ui_allow_list" {
   type        = list(string)
-  description = "A list of CIDRs the UI will be available to"
-  default     = ["0.0.0.0/0"]
+  default     = []
+  description = "List of CIDRs we want to grant access to our Metaflow UI Service. Usually this is our VPN's CIDR blocks."
 }
 
 variable "extra_ui_backend_env_vars" {
