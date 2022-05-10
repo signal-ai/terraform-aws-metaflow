@@ -53,6 +53,12 @@ variable "ecs_cluster_id" {
   description = "The ID of an existing ECS cluster to run services on. If no cluster ID is specfied, a new cluster will be created."
 }
 
+variable "compute_environment_egress_cidr_blocks" {
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+  description = "CIDR blocks to which egress is allowed from the Batch Compute environment's security group"
+}
+
 variable "enable_step_functions" {
   default     = false
   description = "If true, apply policies required for step functions"

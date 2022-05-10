@@ -86,6 +86,7 @@ module "metaflow-computation" {
   compute_environment_min_vcpus           = var.compute_environment_min_vcpus
 
   ecs_cluster_id                          = var.ecs_cluster_id
+  compute_environment_egress_cidr_blocks  = var.compute_environment_egress_cidr_blocks
   enable_step_functions                   = var.enable_step_functions
   iam_partition                           = var.iam_partition
   metaflow_step_functions_dynamodb_policy = module.metaflow-step-functions.metaflow_step_functions_dynamodb_policy
