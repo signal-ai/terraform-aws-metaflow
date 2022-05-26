@@ -42,6 +42,8 @@ module "metaflow-metadata-service" {
 module "metaflow-ui" {
   source = "./modules/ui"
 
+  count = 1
+
   resource_prefix = local.resource_prefix
   resource_suffix = local.resource_suffix
 
