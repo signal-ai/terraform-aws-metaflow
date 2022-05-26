@@ -14,43 +14,45 @@ resource "aws_ecs_cluster" "this" {
 resource "aws_ecs_task_definition" "this" {
   family = "${var.resource_prefix}service${var.resource_suffix}" # Unique name for task definition
 
-  container_definitions = <<EOF
-[
-  {
-    "name": "${var.resource_prefix}service${var.resource_suffix}",
-    "image": "${var.metadata_service_container_image}",
-    "essential": true,
-    "cpu": 512,
-    "memory": 1024,
-    "portMappings": [
-      {
-        "containerPort": 8080,
-        "hostPort": 8080
-      },
-      {
-        "containerPort": 8082,
-        "hostPort": 8082
-      }
-    ],
-    "environment": [
-      {"name": "MF_METADATA_DB_HOST", "value": "${replace(var.rds_master_instance_endpoint, ":5432", "")}"},
-      {"name": "MF_METADATA_DB_NAME", "value": "metaflow"},
-      {"name": "MF_METADATA_DB_PORT", "value": "5432"},
-      {"name": "MF_METADATA_DB_PSWD", "value": "${var.database_password}"},
-      {"name": "MF_METADATA_DB_USER", "value": "${var.database_username}"}
-    ],
-    "logConfiguration": {
-        "logDriver": "awslogs",
-        "options": {
-            "awslogs-group": "${aws_cloudwatch_log_group.this.name}",
-            "awslogs-region": "${data.aws_region.current.name}",
-            "awslogs-stream-prefix": "metadata"
+  container_definitions = jsonencode([
+    {
+      "name"      = "${var.resource_prefix}service${var.resource_suffix}",
+      "image"     = "${var.metadata_service_container_image}",
+      "essential" = true,
+      "cpu"       = 512,
+      "memory"    = 1024,
+      "portMappings" = [
+        {
+          "containerPort" = 8080,
+          "hostPort"      = 8080
+        },
+        {
+          "containerPort" = 8082,
+          "hostPort"      = 8082
         }
+      ],
+      "environment" = [
+        { "name" = "MF_METADATA_DB_HOST", "value" = "${replace(var.rds_master_instance_endpoint, ":5432", "")}" },
+        { "name" = "MF_METADATA_DB_NAME", "value" = "metaflow" },
+        { "name" = "MF_METADATA_DB_PORT", "value" = "5432" },
+        { "name" = "MF_METADATA_DB_USER", "value" = "${var.database_username}" },
+      ],
+      "secrets" = [
+        {
+          "name"      = "MF_METADATA_DB_PSWD",
+          "valueFrom" = var.database_password_secret_manager_arn,
+        }
+      ],
+      "logConfiguration" = {
+        "logDriver" = "awslogs",
+        "options" = {
+          "awslogs-group"         = "${aws_cloudwatch_log_group.this.name}",
+          "awslogs-region"        = "${data.aws_region.current.name}",
+          "awslogs-stream-prefix" = "metadata"
+        }
+      }
     }
-  }
-]
-EOF
-
+  ])
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   task_role_arn            = aws_iam_role.metadata_svc_ecs_task_role.arn

@@ -16,6 +16,12 @@ resource "aws_ecs_task_definition" "ui_backend" {
         }
       ]
       environment = [for k, v in merge(local.default_ui_backend_env_vars, var.extra_ui_backend_env_vars) : { name = k, value = v }]
+      secrets = [
+        {
+          "name" : "MF_METADATA_DB_PSWD",
+          "valueFrom" : var.database_password_secret_manager_arn,
+        }
+      ],
       logConfiguration = {
         logDriver = "awslogs"
         options = {

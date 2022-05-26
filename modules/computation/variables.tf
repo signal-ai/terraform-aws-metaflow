@@ -9,6 +9,12 @@ variable "batch_type" {
   }
 }
 
+variable "database_password_secret_manager_arn" {
+  type        = string
+  description = "The arn of the database password stored in AWS secrets manager"
+  sensitive   = true
+}
+
 variable "compute_environment_ami_id" {
   type        = string
   description = "The AMI ID to use for Batch Compute Environment EC2 instances. If not specified, defaults to the latest ECS optimised AMI."

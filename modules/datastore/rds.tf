@@ -51,6 +51,15 @@ resource "random_password" "this" {
   override_special = "!#$%&*()-_=+[]{}<>:?"
 }
 
+resource "aws_secretsmanager_secret" "rds_db_password" {
+  name = "${var.resource_prefix}${var.db_name}_password${var.resource_suffix}"
+}
+
+resource "aws_secretsmanager_secret_version" "example" {
+  secret_id     = aws_secretsmanager_secret.rds_db_password.id
+  secret_string = random_password.this.result
+}
+
 resource "random_pet" "final_snapshot_id" {}
 
 /*

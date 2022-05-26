@@ -8,9 +8,9 @@ output "METAFLOW_DATASTORE_SYSROOT_S3" {
   description = "Amazon S3 URL for Metaflow DataStore"
 }
 
-output "database_password" {
-  value       = random_password.this.result
-  description = "The database password"
+output "database_password_secret_manager_arn" {
+  value       = aws_secretsmanager_secretrds_db_password.arn
+  description = "The arn of the database password stored in AWS secrets manager"
 }
 
 output "database_username" {

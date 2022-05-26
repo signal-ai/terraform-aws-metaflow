@@ -20,7 +20,6 @@ locals {
     "MF_METADATA_DB_HOST"           = "${replace(var.rds_master_instance_endpoint, ":5432", "")}"
     "MF_METADATA_DB_NAME"           = "metaflow"
     "MF_METADATA_DB_PORT"           = "5432"
-    "MF_METADATA_DB_PSWD"           = "${var.database_password}"
     "MF_METADATA_DB_USER"           = "${var.database_username}"
     "PATH_PREFIX"                   = "/api/"
     "MF_DATASTORE_ROOT"             = "${var.METAFLOW_DATASTORE_SYSROOT_S3}"

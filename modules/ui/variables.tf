@@ -1,7 +1,8 @@
 
-variable "database_password" {
+variable "database_password_secret_manager_arn" {
   type        = string
-  description = "The database password"
+  description = "The arn of the database password stored in AWS secrets manager"
+  sensitive   = true
 }
 
 variable "database_username" {

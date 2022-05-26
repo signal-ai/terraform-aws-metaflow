@@ -27,6 +27,41 @@ resource "aws_iam_role" "ecs_execution_role" {
   tags = var.standard_tags
 }
 
+
+data "aws_iam_policy_document" "db_secrets" {
+  statement {
+    sid = "AllowDBSecretAccess"
+
+    effect = "Allow"
+
+    actions = [
+      "secretsmanager:GetResourcePolicy",
+      "secretsmanager:GetSecretValue",
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:ListSecretVersionIds"
+    ]
+
+    resources = [
+      var.database_password_secret_manager_arn
+    ]
+  }
+
+  statement {
+    sid = "AllowSecretsManagerList"
+
+    effect = "Allow"
+
+    actions = [
+      "secretsmanager:ListSecrets",
+    ]
+
+    resources = [
+      "*"
+    ]
+  }
+}
+
+
 data "aws_iam_policy_document" "ecs_task_execution_policy" {
   statement {
     effect = "Allow"
@@ -52,4 +87,10 @@ resource "aws_iam_role_policy" "grant_ecs_access" {
   name   = "ecs_access"
   role   = aws_iam_role.ecs_execution_role.name
   policy = data.aws_iam_policy_document.ecs_task_execution_policy.json
+}
+
+resource "aws_iam_role_policy" "grant_db_secrets" {
+  name   = "dbt_secrets"
+  role   = aws_iam_role.ecs_execution_role.name
+  policy = data.aws_iam_policy_document.db_secrets.json
 }

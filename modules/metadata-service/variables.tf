@@ -15,9 +15,10 @@ variable "ecs_cluster_id" {
   description = "The ID of an existing ECS cluster to run services on. If no cluster ID is specfied, a new cluster will be created."
 }
 
-variable "database_password" {
+variable "database_password_secret_manager_arn" {
   type        = string
-  description = "The database password"
+  description = "The arn of the database password stored in AWS secrets manager"
+  sensitive   = true
 }
 
 variable "database_username" {

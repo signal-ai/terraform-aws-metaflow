@@ -47,19 +47,19 @@ module "metaflow-metadata-service" {
   resource_prefix = local.resource_prefix
   resource_suffix = local.resource_suffix
 
-  access_list_cidr_blocks          = []
-  api_basic_auth                   = true
-  database_password                = module.metaflow-datastore.database_password
-  database_username                = module.metaflow-datastore.database_username
-  datastore_s3_bucket_kms_key_arn  = module.metaflow-datastore.datastore_s3_bucket_kms_key_arn
-  fargate_execution_role_arn       = aws_iam_role.ecs_execution_role.arn
-  metaflow_vpc_id                  = module.vpc.vpc_id
-  metadata_service_container_image = module.metaflow-common.default_metadata_service_container_image
-  rds_master_instance_endpoint     = module.metaflow-datastore.rds_master_instance_endpoint
-  s3_bucket_arn                    = module.metaflow-datastore.s3_bucket_arn
-  subnet1_id                       = module.vpc.private_subnets[0]
-  subnet2_id                       = module.vpc.private_subnets[1]
-  vpc_cidr_block                   = module.vpc.vpc_cidr_block
+  access_list_cidr_blocks              = []
+  api_basic_auth                       = true
+  database_password_secret_manager_arn = module.metaflow-datastore.database_password_secret_manager_arn
+  database_username                    = module.metaflow-datastore.database_username
+  datastore_s3_bucket_kms_key_arn      = module.metaflow-datastore.datastore_s3_bucket_kms_key_arn
+  fargate_execution_role_arn           = aws_iam_role.ecs_execution_role.arn
+  metaflow_vpc_id                      = module.vpc.vpc_id
+  metadata_service_container_image     = module.metaflow-common.default_metadata_service_container_image
+  rds_master_instance_endpoint         = module.metaflow-datastore.rds_master_instance_endpoint
+  s3_bucket_arn                        = module.metaflow-datastore.s3_bucket_arn
+  subnet1_id                           = module.vpc.private_subnets[0]
+  subnet2_id                           = module.vpc.private_subnets[1]
+  vpc_cidr_block                       = module.vpc.vpc_cidr_block
 
   standard_tags = local.tags
 }
