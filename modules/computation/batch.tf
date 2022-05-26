@@ -22,18 +22,18 @@ resource "aws_batch_compute_environment" "this" {
 
   compute_resources {
     # Give permissions so the ECS container instances can make API call.
-    instance_role = ! local.enable_fargate_on_batch ? aws_iam_instance_profile.ecs_instance_role.arn : null
+    instance_role = !local.enable_fargate_on_batch ? aws_iam_instance_profile.ecs_instance_role.arn : null
 
     # List of types that can be launched.
-    instance_type = ! local.enable_fargate_on_batch ? var.compute_environment_instance_types : null
+    instance_type = !local.enable_fargate_on_batch ? var.compute_environment_instance_types : null
 
     # Range of number of CPUs.
     max_vcpus     = var.compute_environment_max_vcpus
-    min_vcpus     = ! local.enable_fargate_on_batch ? var.compute_environment_min_vcpus : null
-    desired_vcpus = ! local.enable_fargate_on_batch ? var.compute_environment_desired_vcpus : null
+    min_vcpus     = !local.enable_fargate_on_batch ? var.compute_environment_min_vcpus : null
+    desired_vcpus = !local.enable_fargate_on_batch ? var.compute_environment_desired_vcpus : null
 
     # Prefers cheap vCPU approaches
-    allocation_strategy = ! local.enable_fargate_on_batch ? "BEST_FIT" : null
+    allocation_strategy = !local.enable_fargate_on_batch ? "BEST_FIT" : null
 
     /* Links to a launch template who has more than the standard 8GB of disk space. So we can download training data.
        Always uses the "default version", which means we can update the Launch Template to a smaller or larger disk size
