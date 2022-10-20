@@ -19,8 +19,8 @@ resource "aws_ecs_task_definition" "this" {
       "name"      = "${var.resource_prefix}service${var.resource_suffix}",
       "image"     = "${var.metadata_service_container_image}",
       "essential" = true,
-      "cpu"       = 512,
-      "memory"    = 1024,
+      "cpu" : var.metadata_service_cpu,
+      "memory" : var.metadata_service_memory,
       "portMappings" = [
         {
           "containerPort" = 8080,
@@ -33,7 +33,7 @@ resource "aws_ecs_task_definition" "this" {
       ],
       "environment" = [
         { "name" = "MF_METADATA_DB_HOST", "value" = "${replace(var.rds_master_instance_endpoint, ":5432", "")}" },
-        { "name" = "MF_METADATA_DB_NAME", "value" = "metaflow" },
+        { "name" = "MF_METADATA_DB_NAME", "value" = "${var.database_name}" },
         { "name" = "MF_METADATA_DB_PORT", "value" = "5432" },
         { "name" = "MF_METADATA_DB_USER", "value" = "${var.database_username}" },
       ],
@@ -57,8 +57,8 @@ resource "aws_ecs_task_definition" "this" {
   requires_compatibilities = ["FARGATE"]
   task_role_arn            = aws_iam_role.metadata_svc_ecs_task_role.arn
   execution_role_arn       = var.fargate_execution_role_arn
-  cpu                      = 512
-  memory                   = 1024
+  cpu                      = var.metadata_service_cpu
+  memory                   = var.metadata_service_memory
 
   tags = merge(
     var.standard_tags,
@@ -93,9 +93,13 @@ resource "aws_ecs_service" "this" {
     container_port   = 8082
   }
 
+  enable_ecs_managed_tags = true
+  propagate_tags          = "TASK_DEFINITION"
+
+  tags = var.standard_tags
+
   lifecycle {
     ignore_changes = [desired_count]
   }
 
-  tags = var.standard_tags
 }

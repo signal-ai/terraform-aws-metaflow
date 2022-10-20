@@ -9,6 +9,12 @@ variable "api_basic_auth" {
   description = "Enable basic auth for API Gateway? (requires key export)"
 }
 
+variable "database_name" {
+  type        = string
+  default     = "metaflow"
+  description = "The database name"
+}
+
 variable "ecs_cluster_id" {
   type        = string
   default     = null
@@ -50,8 +56,19 @@ variable "is_gov" {
 
 variable "metadata_service_container_image" {
   type        = string
-  default     = ""
   description = "Container image for metadata service"
+}
+
+variable "metadata_service_cpu" {
+  type        = number
+  default     = 512
+  description = "ECS task CPU unit for metadata service"
+}
+
+variable "metadata_service_memory" {
+  type        = number
+  default     = 1024
+  description = "ECS task memory in MiB for metadata service"
 }
 
 variable "metaflow_vpc_id" {
@@ -94,7 +111,13 @@ variable "subnet2_id" {
   description = "Second private subnet used for availability zone redundancy"
 }
 
-variable "vpc_cidr_block" {
-  type        = string
-  description = "The VPC CIDR block that we'll access list on our Metadata Service API to allow all internal communications"
+variable "vpc_cidr_blocks" {
+  type        = list(string)
+  description = "The VPC CIDR blocks that we'll access list on our Metadata Service API to allow all internal communications"
+}
+
+variable "with_public_ip" {
+  type        = bool
+  default     = false
+  description = "Enable private IP by default"
 }

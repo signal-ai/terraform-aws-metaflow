@@ -62,9 +62,12 @@ resource "aws_ecs_service" "ui_static" {
     container_port   = 3000
   }
 
+  enable_ecs_managed_tags = true
+  propagate_tags          = "TASK_DEFINITION"
+
+  tags = var.standard_tags
+
   lifecycle {
     ignore_changes = [desired_count]
   }
-
-  tags = var.standard_tags
 }
