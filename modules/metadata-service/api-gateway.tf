@@ -135,7 +135,6 @@ resource "aws_api_gateway_method_response" "db" {
 resource "aws_api_gateway_deployment" "this" {
   rest_api_id = aws_api_gateway_rest_api.this.id
 
-  stage_name = local.api_gateway_stage_name
   # Force re-deployments if any dependencies change
   # https://github.com/hashicorp/terraform/issues/6613
   stage_description = <<EOF
