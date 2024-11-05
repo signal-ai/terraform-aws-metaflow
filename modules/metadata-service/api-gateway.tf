@@ -160,6 +160,10 @@ resource "aws_api_gateway_stage" "this" {
   stage_name    = local.api_gateway_stage_name
 
   tags = var.standard_tags
+
+  # explicit depends_on required to ensure module stands up on first `apply`
+  # can read more here: https://github.com/hashicorp/terraform-provider-aws/issues/14424#issuecomment-765514623
+  depends_on = [aws_api_gateway_deployment.this]
 }
 
 resource "aws_api_gateway_api_key" "this" {
